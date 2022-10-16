@@ -1,16 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Dongle:wght@300&display=swap');
+
 /* * {
     margin: 0;
     padding: 0;
 } */
 
 body {
-    margin-top: 15rem;
+    margin-top: 10rem;
+    font-family: 'Dongle', sans-serif;
 }
 
 header {
     display: flex;
     justify-content: center;
-    font-family: monospace;
+
+}
+
+h1 {
+    color: rgba(0, 0, 0);
+    font-size: 70px;
+    font-weight: 500;
+    margin-bottom: auto;
 }
 
 .board {
@@ -20,6 +30,10 @@ header {
 }
 
 .cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 70px;
     border: solid 1px;
     width: 100px;
     height: 100px;
@@ -60,8 +74,5 @@ header {
 }
 
 .cell:nth-child(9) {
-    border-top: none;
-    border-right: none;
-    border-left: none;
-    border-bottom: none;
+    border: none;
 }
