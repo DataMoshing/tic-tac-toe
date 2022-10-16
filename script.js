@@ -1,51 +1,77 @@
 // Create gameboard as an array inside Gameboard object (module/IIFE)
-const gameBoardModule = (() => {
+const Gameboard = (() => {
+    "use strict"
+    const board = document.querySelector(".board")
 
     // Array with nine indexes 
-    let gameboard = new Array(9).fill("")
+    let gameboard = new Array(9).fill("");
 
     // Update array index with players value
-    const setCell = (index, value) => gameboard[index] = value
+    const setCell = (index, value) => gameboard[index] = value;
 
     // Reset the game board
     const resetBoard = () => {
-        gameboard = ["", "", "", "", "", "", "", "", "",]
+        gameboard = ["", "", "", "", "", "", "", "", ""];
     }
+
     // Get a copy of the original array
     const getBoard = () => {
-        const boardClone = [...gameboard]
+        const boardClone = [...gameboard];
         console.log(boardClone)
-        return boardClone
+        return boardClone;
     }
+
+    // Render the gameboard to web page
+    const renderBoard = () => {
+        for (let i = 0; i < gameboard.length; i++) {
+            let cell = document.createElement("div")
+            cell.classList = "cell";
+            cell.setAttribute("cell-data", i)
+            cell.textContent = gameboard[i]
+            // console.log(cell)
+            board.append(cell)
+        }
+    }
+
     return {
-        setCell,
+        getBoard,
         resetBoard,
-        getBoard
+        renderBoard,
+        setCell
     }
 })();
 
-gameBoardModule.resetBoard()
+Gameboard.renderBoard()
 
+const displayController = (() => {
+    "use strict"
+    const board = document.querySelector(".board")
+
+    // Event listener removes child nodes and updates gameboard when clicked
+    board.addEventListener("click", function (event) {
+        while (board.hasChildNodes()) {
+            board.removeChild(board.firstChild)
+            console.log(event)
+        }
+        Gameboard.setCell(2, "X")
+        Gameboard.renderBoard()
+    })
+
+    return {
+
+    }
+})();
 
 // 2 player game which the players are also objects (factory functions)
-const createPlayer = (player1, player2) => {
+const createPlayer = (player, marker) => {
     return {
-        player1,
-        player2,
-        greet() {
-            console.log("Greetings " + player1 + " and " + player2)
+        player,
+        marker,
+        test() {
+            console.log(`This is ${player} and their marker is ${marker}`)
         }
     }
 }
 
-const test2 = createPlayer("A", "B")
-
-test2.greet();
-
-// Use DOM Manipulation to render HTML (X's and O's)
-// Create factory functions to let players mark the gameboard
-// Check if spots are already taken
-// Build logic to check if game is over (tie or 3-in-a-row)
-// Allow players to input names
-// Add button to start/restart
-// Display winner 
+const player1 = createPlayer("Test1", "X");
+const player2 = createPlayer("Test2", "O");
