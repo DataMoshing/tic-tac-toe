@@ -6,7 +6,7 @@ const Gameboard = (() => {
 
     // Update array index with players value
     const setCell = (index, value) => {
-        console.log(index);
+        console.log({ index, value });
         gameboard[index] = value;
     };
     // Reset the game board
@@ -28,22 +28,14 @@ const displayController = (() => {
     "use strict"
     const board = document.querySelector(".board")
 
-    // Function renderBoard with a parameter of arr
     const renderBoard = (arr) => {
-        // Looping through the argument that passed to the parameter which is copy of the original array 
         for (let i = 0; i < arr.length; i++) {
-            // Creating the element div
             let cell = document.createElement("div")
-            // Giving the cell the id of i or number of times were looping through it
             cell.id = i;
-            // Setting the class of cell to "cell"
             cell.classList = "cell";
-            // Setting the attribute of cell to "cell-data" assigning the index like cell.id
             cell.setAttribute("cell-data", i)
-            // Setting the cell text content of arr[i]
             cell.textContent = arr[i]
-            console.log(cell)
-            // Appending elements to the DOM 
+            // console.log(cell)
             board.append(cell)
         }
     }
@@ -61,6 +53,32 @@ const displayController = (() => {
 })();
 
 const gameController = (() => {
+    const playerFunction = (player, marker) => {
+        return {
+            player,
+            marker,
+        }
+    }
+
+    let player1 = playerFunction("Test1", "X")
+    let player2 = playerFunction("Test2", "O")
+
+    // If isplayeroneturn is placed in function it will always = true
+    let isPlayerOneTurn = true
+    const playerTurn = () => {
+        if (isPlayerOneTurn) {
+            // Set the players turn to false
+            isPlayerOneTurn = false
+            // Return player1 value
+            return player1.marker
+        } else {
+            // Set back to true
+            isPlayerOneTurn = true
+            // Return player2 value
+            return player2.marker
+        }
+    }
+
     // Selecting the display board and set it to a variable
     const boardEl = displayController.board;
     // Render the board and link Gameboard to displayController using a copy of the original array
@@ -71,7 +89,7 @@ const gameController = (() => {
             // Set the cell-data e.target to index
             const index = e.target.getAttribute("cell-data");
             // Update the cells and populate
-            Gameboard.setCell(index, "O");
+            Gameboard.setCell(index, playerTurn());
             // Prevent multiple boards
             displayController.clearBoard();
             // Rerender the board 
@@ -79,3 +97,8 @@ const gameController = (() => {
         }
     });
 })();
+
+
+// Prevent players from playing in spots that are already taken - Something like if index === null
+// If player has already placed their marker switch to other player
+// Build logic to check for 3 in a row/tie
