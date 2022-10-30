@@ -30,12 +30,14 @@ h1 {
 }
 
 .cell {
+    cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 70px;
     border: solid 1px;
     width: 100px;
+    user-select: none;
     height: 100px;
 }
 
