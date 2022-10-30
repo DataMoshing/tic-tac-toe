@@ -7,6 +7,7 @@ const Gameboard = (() => {
     // Update array index with players value
     const setCell = (index, value) => {
         console.log({ index, value });
+        // If gameboard index is empty then set value
         gameboard[index] = value;
     };
     // Reset the game board
@@ -84,21 +85,18 @@ const gameController = (() => {
     // Render the board and link Gameboard to displayController using a copy of the original array
     displayController.renderBoard(Gameboard.getBoard());
     boardEl.addEventListener("click", (e) => {
-        // Only update the cells not anything else
-        if (e.target.classList.contains("cell")) {
-            // Set the cell-data e.target to index
-            const index = e.target.getAttribute("cell-data");
-            // Update the cells and populate
-            Gameboard.setCell(index, playerTurn());
-            // Prevent multiple boards
-            displayController.clearBoard();
-            // Rerender the board 
-            displayController.renderBoard(Gameboard.getBoard());
-        }
+        //  If there is no a target with cell return and exit
+        if (!e.target.classList.contains("cell")) return;
+        // Set the cell-data e.target to index
+        const index = e.target.getAttribute("cell-data");
+        // If there is already a value in index, return and exit function
+        if (Gameboard.getBoard()[index]) return;
+        Gameboard.setCell(index, playerTurn());
+        // Prevent multiple boards
+        displayController.clearBoard();
+        // Rerender the board 
+        displayController.renderBoard(Gameboard.getBoard());
     });
 })();
 
-
-// Prevent players from playing in spots that are already taken - Something like if index === null
-// If player has already placed their marker switch to other player
 // Build logic to check for 3 in a row/tie
