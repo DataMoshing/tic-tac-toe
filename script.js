@@ -2,7 +2,7 @@
 const Gameboard = (() => {
     "use strict"
     // Array with nine indexes 
-    let gameboard = new Array(9).fill("");
+    let gameboard = new Array(9).fill(null);
 
     // Update array index with players value
     const setCell = (index, value) => {
@@ -12,22 +12,49 @@ const Gameboard = (() => {
     };
     // Reset the game board
     const resetBoard = () => {
-        gameboard = ["", "", "", "", "", "", "", "", ""];
+        gameboard = [null, null, null, null, null, null, null, null, null];
+        return gameboard
     }
 
     // Get a copy of the original array
     const getBoard = () => [...gameboard];
 
+    const checkWin = () => {
+        const currentBoard = getBoard()
+        if (currentBoard[0] === "X" && currentBoard[1] === "X" && currentBoard[2] === "X" || currentBoard[3] === "X" && currentBoard[4] === "X" && currentBoard[5] === "X" || currentBoard[6] === "X" && currentBoard[7] === "X" && currentBoard[8] === "X" || currentBoard[0] === "X" && currentBoard[3] === "X" && currentBoard[6] === "X" || currentBoard[1] === "X" && currentBoard[4] === "X" && currentBoard[7] === "X" || currentBoard[2] === "X" && currentBoard[5] === "X" && currentBoard[8] === "X" || currentBoard[0] === "X" && currentBoard[4] === "X" && currentBoard[8] === "X" || currentBoard[2] === "X" && currentBoard[4] === "X" && currentBoard[6] === "X") {
+            console.log("Player 1 wins")
+        } else if
+            (currentBoard[0] === "O" && currentBoard[1] === "O" && currentBoard[2] === "O" || currentBoard[3] === "O" && currentBoard[4] === "O" && currentBoard[5] === "O" || currentBoard[6] === "O" && currentBoard[7] === "O" && currentBoard[8] === "O" || currentBoard[0] === "O" && currentBoard[3] === "O" && currentBoard[6] === "O" || currentBoard[1] === "O" && currentBoard[4] === "O" && currentBoard[7] === "O" || currentBoard[2] === "O" && currentBoard[5] === "O" && currentBoard[8] === "O" || currentBoard[0] === "O" && currentBoard[4] === "O" && currentBoard[8] === "O" || currentBoard[2] === "O" && currentBoard[4] === "O" && currentBoard[6] === "O") {
+            console.log("Player 2 wins")
+        } else {
+            if (!currentBoard.includes(null))
+                console.log("Its a tie")
+        }
+    }
+
     return {
+        checkWin,
         getBoard,
         resetBoard,
         setCell
     }
 })();
 
+
 const displayController = (() => {
     "use strict"
-    const board = document.querySelector(".board")
+    const board = document.querySelector(".board");
+    const newGameBtn = document.createElement("button")
+    newGameBtn.textContent = "New Game"
+    newGameBtn.classList = "new-game"
+    document.body.append(newGameBtn)
+
+    newGameBtn.addEventListener("click", () => {
+        displayController.clearBoard();
+        displayController.renderBoard(Gameboard.resetBoard());
+        displayController.clearBoard();
+        displayController.renderBoard(Gameboard.getBoard());
+    })
 
     const renderBoard = (arr) => {
         for (let i = 0; i < arr.length; i++) {
@@ -54,6 +81,7 @@ const displayController = (() => {
 })();
 
 const gameController = (() => {
+    "use strict"
     const playerFunction = (player, marker) => {
         return {
             player,
@@ -61,22 +89,22 @@ const gameController = (() => {
         }
     }
 
-    let player1 = playerFunction("Test1", "X")
-    let player2 = playerFunction("Test2", "O")
+    let player1 = playerFunction("Test1", "X");
+    let player2 = playerFunction("Test2", "O");
 
     // If isplayeroneturn is placed in function it will always = true
     let isPlayerOneTurn = true
     const playerTurn = () => {
         if (isPlayerOneTurn) {
             // Set the players turn to false
-            isPlayerOneTurn = false
+            isPlayerOneTurn = false;
             // Return player1 value
-            return player1.marker
+            return player1.marker;
         } else {
             // Set back to true
-            isPlayerOneTurn = true
+            isPlayerOneTurn = true;
             // Return player2 value
-            return player2.marker
+            return player2.marker;
         }
     }
 
@@ -89,14 +117,17 @@ const gameController = (() => {
         if (!e.target.classList.contains("cell")) return;
         // Set the cell-data e.target to index
         const index = e.target.getAttribute("cell-data");
-        // If there is already a value in index, return and exit function
+        // if there is already an value/cell return and exit
         if (Gameboard.getBoard()[index]) return;
         Gameboard.setCell(index, playerTurn());
         // Prevent multiple boards
         displayController.clearBoard();
         // Rerender the board 
         displayController.renderBoard(Gameboard.getBoard());
+        Gameboard.checkWin();
     });
+    return {
+        player1,
+        player2
+    }
 })();
-
-// Build logic to check for 3 in a row/tie
