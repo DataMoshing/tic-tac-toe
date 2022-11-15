@@ -22,11 +22,12 @@ const Gameboard = (() => {
     const checkWin = () => {
         const currentBoard = getBoard()
         if (currentBoard[0] === "X" && currentBoard[1] === "X" && currentBoard[2] === "X" || currentBoard[3] === "X" && currentBoard[4] === "X" && currentBoard[5] === "X" || currentBoard[6] === "X" && currentBoard[7] === "X" && currentBoard[8] === "X" || currentBoard[0] === "X" && currentBoard[3] === "X" && currentBoard[6] === "X" || currentBoard[1] === "X" && currentBoard[4] === "X" && currentBoard[7] === "X" || currentBoard[2] === "X" && currentBoard[5] === "X" && currentBoard[8] === "X" || currentBoard[0] === "X" && currentBoard[4] === "X" && currentBoard[8] === "X" || currentBoard[2] === "X" && currentBoard[4] === "X" && currentBoard[6] === "X") {
-            console.log("Player 1 wins")
+            console.log("Player X wins!")
         } else if
             (currentBoard[0] === "O" && currentBoard[1] === "O" && currentBoard[2] === "O" || currentBoard[3] === "O" && currentBoard[4] === "O" && currentBoard[5] === "O" || currentBoard[6] === "O" && currentBoard[7] === "O" && currentBoard[8] === "O" || currentBoard[0] === "O" && currentBoard[3] === "O" && currentBoard[6] === "O" || currentBoard[1] === "O" && currentBoard[4] === "O" && currentBoard[7] === "O" || currentBoard[2] === "O" && currentBoard[5] === "O" && currentBoard[8] === "O" || currentBoard[0] === "O" && currentBoard[4] === "O" && currentBoard[8] === "O" || currentBoard[2] === "O" && currentBoard[4] === "O" && currentBoard[6] === "O") {
-            console.log("Player 2 wins")
+            console.log("Player O wins!")
         } else {
+            // If board does not include null its a tie
             if (!currentBoard.includes(null))
                 console.log("Its a tie")
         }
@@ -40,20 +41,37 @@ const Gameboard = (() => {
     }
 })();
 
-
 const displayController = (() => {
     "use strict"
     const board = document.querySelector(".board");
+    const topHeader = document.querySelector(".top-header")
     const newGameBtn = document.createElement("button")
+    const player1Header = document.createElement("h2")
+    const player2Header = document.createElement("h2")
+
     newGameBtn.textContent = "New Game"
     newGameBtn.classList = "new-game"
     document.body.append(newGameBtn)
 
+
+    const player1Display = () => {
+        player1Header.classList = "player1-header"
+        player1Header.textContent = "Player X's turn"
+        topHeader.append(player1Header)
+    }
+
+    const player2Display = () => {
+        player2Header.classList = "player2-header"
+        player2Header.textContent = "Player O's turn"
+        topHeader.append(player2Header)
+    }
+
     newGameBtn.addEventListener("click", () => {
-        displayController.clearBoard();
         displayController.renderBoard(Gameboard.resetBoard());
-        displayController.clearBoard();
-        displayController.renderBoard(Gameboard.getBoard());
+        isPlayerOneTurn = true
+        displayController.renderBoard(Gameboard.getBoard(displayController.player1Display(), displayController.player2Display()))
+        displayController.renderBoard(Gameboard.getBoard(clearBoard()))
+        // location.reload();
     })
 
     const renderBoard = (arr) => {
@@ -76,10 +94,13 @@ const displayController = (() => {
     return {
         board,
         renderBoard,
-        clearBoard
+        clearBoard,
+        player1Display,
+        player2Display,
     }
 })();
 
+let isPlayerOneTurn = true
 const gameController = (() => {
     "use strict"
     const playerFunction = (player, marker) => {
@@ -93,25 +114,24 @@ const gameController = (() => {
     let player2 = playerFunction("Test2", "O");
 
     // If isplayeroneturn is placed in function it will always = true
-    let isPlayerOneTurn = true
     const playerTurn = () => {
         if (isPlayerOneTurn) {
             // Set the players turn to false
+            displayController.player1Display();
             isPlayerOneTurn = false;
             // Return player1 value
             return player1.marker;
         } else {
             // Set back to true
+            displayController.player2Display()
             isPlayerOneTurn = true;
-            // Return player2 value
             return player2.marker;
         }
     }
 
     // Selecting the display board and set it to a variable
     const boardEl = displayController.board;
-    // Render the board and link Gameboard to displayController using a copy of the original array
-    displayController.renderBoard(Gameboard.getBoard());
+    displayController.renderBoard(Gameboard.getBoard(displayController.player1Display(), displayController.player2Display()))
     boardEl.addEventListener("click", (e) => {
         //  If there is no a target with cell return and exit
         if (!e.target.classList.contains("cell")) return;
@@ -124,7 +144,7 @@ const gameController = (() => {
         displayController.clearBoard();
         // Rerender the board 
         displayController.renderBoard(Gameboard.getBoard());
-        Gameboard.checkWin();
+        Gameboard.checkWin()
     });
     return {
         player1,
