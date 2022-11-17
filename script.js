@@ -15,21 +15,20 @@ const Gameboard = (() => {
         gameboard = [null, null, null, null, null, null, null, null, null];
         return gameboard
     }
-
     // Get a copy of the original array
     const getBoard = () => [...gameboard];
 
     const checkWin = () => {
         const currentBoard = getBoard()
         if (currentBoard[0] === "X" && currentBoard[1] === "X" && currentBoard[2] === "X" || currentBoard[3] === "X" && currentBoard[4] === "X" && currentBoard[5] === "X" || currentBoard[6] === "X" && currentBoard[7] === "X" && currentBoard[8] === "X" || currentBoard[0] === "X" && currentBoard[3] === "X" && currentBoard[6] === "X" || currentBoard[1] === "X" && currentBoard[4] === "X" && currentBoard[7] === "X" || currentBoard[2] === "X" && currentBoard[5] === "X" && currentBoard[8] === "X" || currentBoard[0] === "X" && currentBoard[4] === "X" && currentBoard[8] === "X" || currentBoard[2] === "X" && currentBoard[4] === "X" && currentBoard[6] === "X") {
-            console.log("Player X wins!")
+            return displayController.player1Win()
         } else if
             (currentBoard[0] === "O" && currentBoard[1] === "O" && currentBoard[2] === "O" || currentBoard[3] === "O" && currentBoard[4] === "O" && currentBoard[5] === "O" || currentBoard[6] === "O" && currentBoard[7] === "O" && currentBoard[8] === "O" || currentBoard[0] === "O" && currentBoard[3] === "O" && currentBoard[6] === "O" || currentBoard[1] === "O" && currentBoard[4] === "O" && currentBoard[7] === "O" || currentBoard[2] === "O" && currentBoard[5] === "O" && currentBoard[8] === "O" || currentBoard[0] === "O" && currentBoard[4] === "O" && currentBoard[8] === "O" || currentBoard[2] === "O" && currentBoard[4] === "O" && currentBoard[6] === "O") {
-            console.log("Player O wins!")
+            return displayController.player2Win()
         } else {
             // If board does not include null its a tie
             if (!currentBoard.includes(null))
-                console.log("Its a tie")
+                return displayController.playerTie()
         }
     }
 
@@ -44,46 +43,69 @@ const Gameboard = (() => {
 const displayController = (() => {
     "use strict"
     const board = document.querySelector(".board");
-    const topHeader = document.querySelector(".top-header")
-    const newGameBtn = document.createElement("button")
-    const player1Header = document.createElement("h2")
-    const player2Header = document.createElement("h2")
+    const topHeader = document.querySelector(".top-header");
+    const newGameBtn = document.createElement("button");
+    const player1Header = document.createElement("h1");
+    const player2Header = document.createElement("h1");
+    const player1Modal = document.getElementById("player1-modal")
+    const player2Modal = document.getElementById("player2-modal")
+    const playerTieModal = document.getElementById("player-tie-modal")
 
-    newGameBtn.textContent = "New Game"
-    newGameBtn.classList = "new-game"
-    document.body.append(newGameBtn)
-
+    newGameBtn.textContent = "New Game";
+    newGameBtn.classList = "new-game";
+    document.body.append(newGameBtn);
 
     const player1Display = () => {
-        player1Header.classList = "player1-header"
-        player1Header.textContent = "Player X's turn"
-        topHeader.append(player1Header)
+        player1Header.classList = "player1-header";
+        player1Header.textContent = "Player X's turn";
+        topHeader.append(player1Header);
     }
 
     const player2Display = () => {
-        player2Header.classList = "player2-header"
-        player2Header.textContent = "Player O's turn"
-        topHeader.append(player2Header)
+        player2Header.classList = "player2-header";
+        player2Header.textContent = "Player O's turn";
+        topHeader.append(player2Header);
+    }
+
+    const player1Win = () => {
+        player1Modal.style.display = "block"
+        board.style.pointerEvents = "None"
+        player1Modal.showModal()
+    }
+
+    const player2Win = () => {
+        player2Modal.style.display = "block"
+        board.style.pointerEvents = "None"
+        player2Modal.showModal()
+    }
+
+    const playerTie = () => {
+        playerTieModal.style.display = "block"
+        playerTieModal.showModal()
     }
 
     newGameBtn.addEventListener("click", () => {
         displayController.renderBoard(Gameboard.resetBoard());
-        isPlayerOneTurn = true
+        isPlayerOneTurn = true;
+        board.style.pointerEvents = "auto"
         displayController.renderBoard(Gameboard.getBoard(displayController.player1Display(), displayController.player2Display()))
-        displayController.renderBoard(Gameboard.getBoard(clearBoard()))
+        displayController.renderBoard(Gameboard.getBoard(clearBoard()));
         // location.reload();
     })
 
     const renderBoard = (arr) => {
         for (let i = 0; i < arr.length; i++) {
-            let cell = document.createElement("div")
+            let cell = document.createElement("div");
             cell.id = i;
             cell.classList = "cell";
-            cell.setAttribute("cell-data", i)
-            cell.textContent = arr[i]
-            // console.log(cell)
-            board.append(cell)
+            cell.setAttribute("cell-data", i);
+            cell.textContent = arr[i];
+            board.append(cell);
         }
+    }
+
+    const disableBoard = () => {
+        board.disabled
     }
     // Event listener removes duplicate board and updates gameboard when clicked
     const clearBoard = () => {
@@ -91,12 +113,17 @@ const displayController = (() => {
             board.removeChild(board.firstChild);
         }
     }
+
     return {
         board,
         renderBoard,
         clearBoard,
         player1Display,
         player2Display,
+        player1Win,
+        player2Win,
+        playerTie,
+        disableBoard
     }
 })();
 
@@ -123,7 +150,7 @@ const gameController = (() => {
             return player1.marker;
         } else {
             // Set back to true
-            displayController.player2Display()
+            displayController.player2Display();
             isPlayerOneTurn = true;
             return player2.marker;
         }
