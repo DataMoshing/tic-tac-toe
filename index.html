@@ -13,12 +13,41 @@
 
 <body>
     <header>
-        <h1>Tic Tac Toe</h1>
-        <div class="top-header"></div>
+        <div id="myModal" class="modal">
+            <!-- <div class="player1-modal">
+                <p>Player X wins !</p>
+            </div> -->
+            <dialog id="player1-modal">
+                <p>Player X wins !</p>
+                <form method="dialog">
+                    <button>Close</button>
+                </form>
+            </dialog>
+            <!-- <div class="player2-modal">
+                <p>Player O wins !</p>
+            </div> -->
+            <dialog id="player2-modal">
+                <p>Player O wins !</p>
+                <form method="dialog">
+                    <button>Close</button>
+                </form>
+            </dialog>
+            <dialog id="player-tie-modal">
+                <p>It's a tie !</p>
+                <form method="dialog">
+                    <button>Close</button>
+                </form>
+            </dialog>
+        </div>
+        <div class="wrapper">
+            <h1>Tic Tac Toe</h1>
+            <div class="top-header"></div>
+        </div>
     </header>
     <main>
         <div class="board"></div>
     </main>
+
 </body>
 
 </html>
