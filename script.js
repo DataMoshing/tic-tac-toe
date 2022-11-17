@@ -104,9 +104,6 @@ const displayController = (() => {
         }
     }
 
-    const disableBoard = () => {
-        board.disabled
-    }
     // Event listener removes duplicate board and updates gameboard when clicked
     const clearBoard = () => {
         while (board.hasChildNodes()) {
@@ -123,7 +120,6 @@ const displayController = (() => {
         player1Win,
         player2Win,
         playerTie,
-        disableBoard
     }
 })();
 
