@@ -11,12 +11,16 @@ body {
     display: grid;
     justify-items: center;
     min-width: 600px;
+    overflow: none;
 }
 
 header {
     display: flex;
     flex-direction: column;
     align-items: center;
+    border-top: none;
+    border-left: none;
+    border-right: none;
 }
 
 h1 {
@@ -24,13 +28,13 @@ h1 {
     color: rgba(0, 0, 0);
     font-size: 70px;
     font-weight: 500;
-    ;
 }
 
 .board {
     display: grid;
     grid-template-columns: repeat(3, 100px);
     justify-content: center;
+    margin-top: 5rem;
 }
 
 .cell {
@@ -83,6 +87,55 @@ h1 {
     border: none;
 }
 
+.top-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.player1-header {
+    display: flex;
+    font-size: 35px;
+}
+
+.player2-header {
+    display: flex;
+    font-size: 35px;
+}
+
+.modal {
+    position: absolute;
+    left: 0;
+    top: 0;
+    visibility: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#player1-modal,
+#player2-modal,
+#player-tie-modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    padding: 10px;
+    border: 1px solid #888;
+    width: 25%;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 2px 3px rgb(0 0 0 / 0.5)
+}
+
+#player1-modal>p,
+#player2-modal>p,
+#player-tie-modal>p {
+    display: flex;
+    justify-content: center;
+    font-size: 55px;
+}
+
 .new-game {
     display: flex;
     justify-content: center;
@@ -129,21 +182,11 @@ h1 {
     transform: translateY(0);
 }
 
-.top-header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
 
-.player1-header {
-    display: flex;
-    font-size: 35px;
-    /* padding: 2px; */
-}
-
-.player2-header {
-    display: flex;
-    font-size: 35px;
-
-    /* padding: 2px; */
+.wrapper {
+    border: #000000 1px solid;
+    height: 150px;
+    border-top: none;
+    border-left: none;
+    border-right: none;
 }
